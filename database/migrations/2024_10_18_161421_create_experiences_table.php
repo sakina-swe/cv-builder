@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('student_id')->constrained('students');
+            $table->string('name');
+            $table->string('position');
+            $table->text('description');
+            $table->date('start_date');
+            $table->date('end_date');
         });
     }
 

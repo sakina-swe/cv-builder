@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('social_network_student', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('social_network_id')->constrained('social_networks')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->string('username');
         });
     }
 

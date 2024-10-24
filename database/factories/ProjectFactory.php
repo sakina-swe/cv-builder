@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Project;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ * @extends Factory<Project>
  */
 class ProjectFactory extends Factory
 {
@@ -17,7 +19,11 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'student_id' => Student::factory(),
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(),
+            'source_link' => $this->faker->url(),
+            'demo_link' => $this->faker->url(),
         ];
     }
 }

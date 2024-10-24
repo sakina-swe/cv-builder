@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\SocialNetwork;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialNetwork>
+ * @extends Factory<SocialNetwork>
  */
 class SocialNetworkFactory extends Factory
 {
@@ -17,7 +18,8 @@ class SocialNetworkFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'link' => $this->faker->url(),
         ];
     }
 }
