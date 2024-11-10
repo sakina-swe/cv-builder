@@ -2,65 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreLanguageRequest;
-use App\Http\Requests\UpdateLanguageRequest;
 use App\Models\Language;
+use Illuminate\Http\Request;
 
 class LanguageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        //
+        return response()->json(Language::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Language $language): \Illuminate\Http\JsonResponse
     {
-        //
+        return response()->json($language, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreLanguageRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:languages,name',
+            'level' => 'required|string|max:255',
+        ]);
+
+        $language = Language::create($data);
+
+        return response()->json(['data' => $language], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Language $language)
+    public function update(Request $request, Language $language): \Illuminate\Http\JsonResponse
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|unique:languages,name|max:255',
+        ]);
+
+        $language->update($validatedData);
+
+        return response()->json($language, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Language $language)
+    public function destroy(Language $language): \Illuminate\Http\JsonResponse
     {
-        //
-    }
+        $language->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateLanguageRequest $request, Language $language)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Language $language)
-    {
-        //
+        return response()->json(null, 200);
     }
 }

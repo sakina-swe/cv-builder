@@ -2,65 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreExperienceRequest;
-use App\Http\Requests\UpdateExperienceRequest;
 use App\Models\Experience;
+use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
+        $data = $request->validate([
+            'student_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $experience = Experience::create($data);
+
+        return response()->json($experience, 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id): \Illuminate\Http\JsonResponse
     {
-        //
+        $experience = Experience::findOrFail($id);
+
+        return response()->json($experience);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreExperienceRequest $request)
+    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $data = $request->validate([
+            'student_id' => 'integer',
+            'name' => 'string|max:255',
+            'position' => 'string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $experience = Experience::findOrFail($id);
+        $experience->update($data);
+
+        return response()->json($experience);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Experience $experience)
+    public function destroy($id): \Illuminate\Http\JsonResponse
     {
-        //
-    }
+        $experience = Experience::findOrFail($id);
+        $experience->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Experience $experience)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateExperienceRequest $request, Experience $experience)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Experience $experience)
-    {
-        //
+        return response()->json(['message' => 'Experience deleted successfully.']);
     }
 }

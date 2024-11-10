@@ -15,6 +15,9 @@ class StudentFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Student::class;
+
     public function definition(): array
     {
         return [
